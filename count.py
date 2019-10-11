@@ -92,6 +92,8 @@ class count:
                                                localcores=localcores,
                                                localmem=localmem)
 
+        print(cellranger_str)
+
         os.system(cellranger_str)
 
         count.remove_tmp_path()
