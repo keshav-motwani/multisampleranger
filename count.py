@@ -70,8 +70,8 @@ class count:
 
         sample_id = library[count.SAMPLE_ORIGIN].values[0]
         library["sample"] = library.sample_name
-        library[["fastqs", "sample", "library_type"]].to_csv(library_path)
-        feature_reference.to_csv(feature_ref_path)
+        library[["fastqs", "sample", "library_type"]].to_csv(library_path, index=False)
+        feature_reference.to_csv(feature_ref_path, index=False)
 
         cellranger_str = "cellranger count --id={sample}" + \
                          " --libraries={library_path}" \
