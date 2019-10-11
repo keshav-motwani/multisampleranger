@@ -1,5 +1,7 @@
 import argparse
 import warnings
+from subprocess import Popen
+
 from pathlib import Path
 import shutil
 import os
@@ -94,7 +96,8 @@ class count:
 
         print(cellranger_str)
 
-        os.system(cellranger_str)
+        p = Popen(cellranger_str, shell=True)
+        p.communicate()
 
         count.remove_tmp_path()
 
