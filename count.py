@@ -4,7 +4,6 @@ from subprocess import Popen
 
 from pathlib import Path
 import shutil
-import os
 
 import pandas as pd
 
