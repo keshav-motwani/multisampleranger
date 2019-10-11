@@ -68,16 +68,16 @@ class count:
         feature_ref_path = count.TMP_PATH + "feature_reference.csv"
 
         sample_id = library[count.SAMPLE_ORIGIN].values[0]
-        library.to_csv(library_path)
+        library["sample"] = library.sample_name
+        library[["fastqs", "sample", "library_type"]].to_csv(library_path)
         feature_reference.to_csv(feature_ref_path)
 
         cellranger_str = "cellranger count --id={sample}" + \
                          " --libraries={library_path}" \
-                         " --feature_ref={feature_ref_path}" \
+                         " --feature-ref={feature_ref_path}" \
                          " --transcriptome={transcriptome_path}" + \
                          " --localcores={localcores}" + \
-                         " --localmem={localmem}" + \
-                         " --sample={sample}"
+                         " --localmem={localmem}"
 
         if nosecondary:
             cellranger_str = cellranger_str + " --nosecondary"
