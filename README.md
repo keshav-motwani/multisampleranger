@@ -6,9 +6,7 @@
 
 ### Usage
 
-Currently, this only supports `cellranger count` workflows.
-
-To use this wrapper, run the following command:
+#### `cellranger count`
 
 ```
 python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
@@ -27,16 +25,16 @@ python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
   - `fastqs`: [If `fastq_pattern` not specified]: Path to folder containing fastqs for the library
   - Example contents: 
  
-| sample_origin | sample_name   | library_type     | Index    | Lane | 
-|---------------|---------------|------------------|----------|------| 
-| Control1      | Control1_GEX  | Gene Expression  | SI-GA-D4 | *    | 
-| Diseased1     | Diseased1_GEX | Gene Expression  | SI-GA-D5 | *    | 
-| Control2      | Control2_GEX  | Gene Expression  | SI-GA-D6 | *    | 
-| Diseased2     | Diseased2_GEX | Gene Expression  | SI-GA-D7 | *    | 
-| Control1      | Control1_FB   | Antibody Capture | SI-NA-A1 | *    | 
-| Diseased1     | Diseased1_FB  | Antibody Capture | SI-NA-A2 | *    | 
-| Control2      | Control2_FB   | Antibody Capture | SI-NA-A3 | *    | 
-| Diseased2     | Diseased2_FB  | Antibody Capture | SI-NA-A4 | *    | 
+| sample_origin | sample_name   | library_type     |
+|---------------|---------------|------------------|
+| Control1      | Control1_GEX  | Gene Expression  |
+| Diseased1     | Diseased1_GEX | Gene Expression  |
+| Control2      | Control2_GEX  | Gene Expression  |
+| Diseased2     | Diseased2_GEX | Gene Expression  |
+| Control1      | Control1_FB   | Antibody Capture |
+| Diseased1     | Diseased1_FB  | Antibody Capture |
+| Control2      | Control2_FB   | Antibody Capture |
+| Diseased2     | Diseased2_FB  | Antibody Capture |
 
 
 * `feature_reference_path`: Path to feature reference information in same format as `cellranger count --feature-ref` argument.
