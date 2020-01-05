@@ -1,9 +1,8 @@
 import argparse
-import warnings
-from subprocess import Popen
-
-from pathlib import Path
 import shutil
+import warnings
+from pathlib import Path
+from subprocess import Popen
 
 import pandas as pd
 
@@ -11,8 +10,8 @@ import pandas as pd
 class count:
 
     FASTQS = "fastqs"
-    SAMPLE_ORIGIN = "sample_origin"
     SAMPLE_NAME = "sample_name"
+    LIBRARY_NAME = "library_name"
     LIBRARY_TYPE = "library_type"
 
     TMP_PATH = "tmp/"
@@ -68,8 +67,8 @@ class count:
         library_path = count.TMP_PATH + "libraries.csv"
         feature_ref_path = count.TMP_PATH + "feature_reference.csv"
 
-        sample_id = library[count.SAMPLE_ORIGIN].values[0]
-        library["sample"] = library.sample_name
+        sample_name = library[count.SAMPLE_NAME].values[0]
+        library["sample"] = library.library_name
         library[["fastqs", "sample", "library_type"]].to_csv(library_path, index=False)
         feature_reference.to_csv(feature_ref_path, index=False)
 
@@ -86,14 +85,12 @@ class count:
         if expect_cells is not None:
             cellranger_str = cellranger_str + " --expect_cells=" + expect_cells
 
-        cellranger_str = cellranger_str.format(sample=sample_id,
+        cellranger_str = cellranger_str.format(sample=sample_name,
                                                library_path=library_path,
-                                               feature_ref_path = feature_ref_path,
+                                               feature_ref_path=feature_ref_path,
                                                transcriptome_path=transcriptome_path,
                                                localcores=localcores,
                                                localmem=localmem)
-
-        print(cellranger_str)
 
         p = Popen(cellranger_str, shell=True)
         p.communicate()
@@ -103,18 +100,18 @@ class count:
     @staticmethod
     def split_libraries(libraries):
 
-        libraries = libraries.groupby(count.SAMPLE_ORIGIN)
+        libraries = libraries.groupby(count.SAMPLE_NAME)
 
         return [libraries.get_group(x) for x in libraries.groups]
 
     @staticmethod
     def check_libraries(libraries, fastq_pattern):
 
-        assert count.SAMPLE_ORIGIN in libraries.columns, \
-            count.SAMPLE_ORIGIN + " column must be present in libraries file"
-
         assert count.SAMPLE_NAME in libraries.columns, \
             count.SAMPLE_NAME + " column must be present in libraries file"
+
+        assert count.LIBRARY_NAME in libraries.columns, \
+            count.LIBRARY_NAME + " column must be present in libraries file"
 
         assert count.LIBRARY_TYPE in libraries.columns, \
             count.LIBRARY_TYPE + " column must be present in libraries file"
@@ -123,18 +120,13 @@ class count:
             assert count.FASTQS in libraries.columns, \
                 count.FASTQS + " column must be present in libraries file if fastq_pattern not specified"
 
-    # libraries csv in following format
-    # [fastq], sample_origin, sample_name, library_type
-
-    # arguments: [fastq_pattern (root_path/.../{sample_name}/...)] libraries features
-
     @staticmethod
     def parse_fastqs(libraries, fastq_pattern):
 
         if count.FASTQS in libraries.columns:
             warnings.warn("fastq_pattern ignored, fastqs already specified in input libraries file")
         else :
-            libraries[count.FASTQS] = [fastq_pattern.replace("<sample_name>", x) for x in libraries[count.SAMPLE_NAME].values]
+            libraries[count.FASTQS] = [fastq_pattern.replace("<library_name>", x) for x in libraries[count.LIBRARY_NAME].values]
 
         return libraries
 

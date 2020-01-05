@@ -1,6 +1,6 @@
-# cellranger_wrapper
+# easyranger
 
-### Wrapper around cellranger count and vdj (not implemented yet) to run multiple samples at once.
+### Wrapper around cellranger count and vdj to run multiple samples at once.
 
 `cellranger count` and `vdj` only take a single sample at a time, making it troublesome to run multiple samples through at once. This is especially the case in libraries with feature barcoding, such as those prepared using the CITE-seq assay, as for each sample, one must create a libraries csv for each sample independently, containing the path to fastqs for the gene expression and any other feature barcoding libraries. To get around this limitation, using this wrapper, one can instead create a single libraries file, and specify this. This wrapper will split this by sample origin and process them independently.
 
@@ -19,13 +19,13 @@ python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
 #### Description of arguments:
 
 * `libraries_path`: Path to libraries file with the following columns:
-  - `sample_origin`: Column indicating the biological sample from which the library originated.
-  - `sample_name`: Column indicating the name of library, multiple libraries per `sample_origin` are common for CITE-seq - one for gene expression, one for feature barcodes
+  - `sample_name`: Column indicating the biological sample from which the library originated.
+  - `library_name`: Column indicating the name of library, multiple libraries per `sample_name` are common for CITE-seq - one for gene expression, one for feature barcodes
   - `library_type`: Can be `Gene Expression`, `Antibody Capture`, `CRISPR`, or `Custom`
   - `fastqs`: [If `fastq_pattern` not specified]: Path to folder containing fastqs for the library
   - Example contents: 
  
-| sample_origin | sample_name   | library_type     |
+| sample_name   | library_name  | library_type     |
 |---------------|---------------|------------------|
 | Control1      | Control1_GEX  | Gene Expression  |
 | Diseased1     | Diseased1_GEX | Gene Expression  |
@@ -49,5 +49,5 @@ python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
 
 * `transcriptome`, `localcores`, `localmem`, `expect_cells`: Same as respective arguments to `cellranger count`.
 
-* `fastq_pattern`: A string containing the path to fastqs, but instead of including each `sample_name`, the string contains `<sample_name>` which will be replaced with the sample name as specified in the `libraries_path` file.
-  - Example: `/home/PREFIX/<sample_name>/SUFFIX`
+* `fastq_pattern`: A string containing the path to fastqs, but instead of including each `library_name`, the string contains `<library_name>` which will be replaced with the sample name as specified in the `libraries_path` file.
+  - Example: `/home/PREFIX/<library_name>/SUFFIX`
