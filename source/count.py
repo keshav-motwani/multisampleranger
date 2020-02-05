@@ -1,5 +1,5 @@
 import os
-import sys; sys.path.extend([os.path.abspath(__file__ + "/../")])
+import sys; sys.path.extend([os.path.abspath(__file__ + "/../../")])
 import argparse
 from subprocess import Popen
 
@@ -92,7 +92,6 @@ class Count:
 
         cellranger_str = "cellranger count --id={sample}" + \
                          " --libraries={library_path}" \
-                         " --feature-ref={feature_ref_path}" \
                          " --transcriptome={transcriptome_path}" + \
                          " --localcores={localcores}" + \
                          " --localmem={localmem}"
@@ -102,6 +101,9 @@ class Count:
 
         if expect_cells is not None:
             cellranger_str = cellranger_str + " --expect_cells=" + str(expect_cells)
+
+        if feature_ref_path is not None:
+            cellranger_str = cellranger_str + " --feature-ref=" + feature_ref_path
 
         cellranger_str = cellranger_str.format(sample=sample_name,
                                                library_path=library_path,

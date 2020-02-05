@@ -1,3 +1,5 @@
+import os
+import sys; sys.path.extend([os.path.abspath(__file__ + "/../../")])
 import argparse
 from subprocess import Popen
 
