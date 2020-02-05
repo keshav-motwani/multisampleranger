@@ -38,6 +38,8 @@ CD127,GTGTGTTGTCCTATG,CD127,R2,5PNNNNNNNNNN(BC),Antibody Capture"""
         with open(feature_reference_path, "w") as file:
             file.writelines(feature_reference_txt)
 
+        result_path = "test_results_hi"
+
         Count.run(libraries_path,
                   feature_reference_path,
                   "some_transcriptome.txt",
@@ -45,7 +47,9 @@ CD127,GTGTGTTGTCCTATG,CD127,R2,5PNNNNNNNNNN(BC),Antibody Capture"""
                   128,
                   "/home/PREFIX/<library_name>/SUFFIX",
                   False,
-                  False)
+                  False,
+                  result_path)
 
         shutil.rmtree(tmp_path, ignore_errors=True)
+        shutil.rmtree(result_path, ignore_errors=True)
         shutil.rmtree(Count.OUTPUT_PATH, ignore_errors=True)
