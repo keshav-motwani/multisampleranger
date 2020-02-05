@@ -15,7 +15,7 @@ class VDJ:
     SAMPLE_NAME = "sample_name"
     LIBRARY_NAME = "library_name"
 
-    OUTPUT_PATH = "easyranger_vdj_output/"
+    OUTPUT_PATH = "easyranger_vdj/"
     RUN_SCRIPT_PATH = OUTPUT_PATH + "run_script.bash"
     ARRAY_RUN_SCRIPT_PATH = OUTPUT_PATH + "array_run_script.bash"
     SAMPLE_NAMES_FILE_PATH = OUTPUT_PATH + "sample_names.txt"
@@ -30,7 +30,8 @@ class VDJ:
                 args.localcores,
                 args.localmem,
                 args.fastq_pattern,
-                args.execute.lower() == "true")
+                args.execute.lower() == "true",
+                args.result_path)
 
     @staticmethod
     def parse_args():
@@ -43,11 +44,12 @@ class VDJ:
         parser.add_argument('--localmem', action="store", default=120)
         parser.add_argument('--fastq_pattern', action="store", default=None)
         parser.add_argument('--execute', action="store", default=True)
+        parser.add_argument('--result_path', action="store", default=".")
 
         return parser.parse_args()
 
     @staticmethod
-    def run(libraries_path, reference_path, localcores, localmem, fastq_pattern, execute):
+    def run(libraries_path, reference_path, localcores, localmem, fastq_pattern, execute, result_path):
 
         libraries = pd.read_csv(libraries_path)
 
@@ -55,22 +57,26 @@ class VDJ:
 
         libraries = IO.parse_fastqs(libraries, VDJ.LIBRARY_NAME, VDJ.FASTQS, fastq_pattern)
 
-        PathManager.create_path(VDJ.OUTPUT_PATH)
+        PathManager.create_path(result_path + "/" + VDJ.OUTPUT_PATH)
 
         sample_names = set()
         command_strings = set()
 
         for library in VDJ.split_libraries(libraries):
-            command = VDJ._run(library, reference_path, localcores, localmem, execute)
+            command = VDJ._run(library, reference_path, localcores, localmem, execute, result_path)
             command_strings.add(command)
             sample_names.add(library.sample_name.values[0])
 
-        IO.write_sample_names(VDJ.SAMPLE_NAMES_FILE_PATH, sample_names)
+        IO.write_sample_names(result_path + "/" + VDJ.SAMPLE_NAMES_FILE_PATH,
+                              sample_names)
 
-        IO.write_run_script(VDJ.RUN_SCRIPT_PATH, VDJ.ARRAY_RUN_SCRIPT_PATH, command_strings, sample_names)
+        IO.write_run_script(result_path + "/" + VDJ.RUN_SCRIPT_PATH,
+                            result_path + "/" + VDJ.ARRAY_RUN_SCRIPT_PATH,
+                            command_strings,
+                            sample_names)
 
     @staticmethod
-    def _run(library: pd.DataFrame, reference_path, localcores, localmem, execute):
+    def _run(library: pd.DataFrame, reference_path, localcores, localmem, execute, result_path):
 
         sample_name = library[VDJ.SAMPLE_NAME].values[0]
 
@@ -87,6 +93,8 @@ class VDJ:
                                                reference_path=reference_path,
                                                localcores=localcores,
                                                localmem=localmem)
+
+        cellranger_str = "cd " + os.path.abspath(result_path) + "; " + cellranger_str
 
         if execute:
             p = Popen(cellranger_str, shell=True)
