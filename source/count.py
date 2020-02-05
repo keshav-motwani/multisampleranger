@@ -87,7 +87,7 @@ class Count:
 
         library_path = Count.LIBRARIES_PATH + sample_name + "_libraries.csv"
 
-        library["sample"] = library.library_name
+        library = library.assign(sample=library.library_name)
         library[["fastqs", "sample", "library_type"]].to_csv(library_path, index=False)
 
         cellranger_str = "cellranger count --id={sample}" + \
@@ -103,7 +103,7 @@ class Count:
             cellranger_str = cellranger_str + " --expect_cells=" + str(expect_cells)
 
         if feature_ref_path is not None:
-            cellranger_str = cellranger_str + " --feature-ref=" + feature_ref_path
+            cellranger_str = cellranger_str + " --feature-ref=" + str(feature_ref_path)
 
         cellranger_str = cellranger_str.format(sample=sample_name,
                                                library_path=library_path,
