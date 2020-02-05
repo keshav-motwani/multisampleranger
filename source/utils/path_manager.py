@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-class Utils:
+class PathManager:
 
     @staticmethod
     def create_path(path):

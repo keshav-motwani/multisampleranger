@@ -1,10 +1,10 @@
 import argparse
-import warnings
 from subprocess import Popen
 
 import pandas as pd
 
-from source.utils import Utils
+from source.utils.path_manager import PathManager
+from source.utils.io import IO
 
 
 class Count:
@@ -13,6 +13,7 @@ class Count:
     SAMPLE_NAME = "sample_name"
     LIBRARY_NAME = "library_name"
     LIBRARY_TYPE = "library_type"
+    EXPECT_CELLS = "expected_cell_count"
 
     OUTPUT_PATH = "easyranger_count_output/"
     LIBRARIES_PATH = OUTPUT_PATH + "libraries/"
@@ -31,9 +32,8 @@ class Count:
                   args.localcores,
                   args.localmem,
                   args.fastq_pattern,
-                  args.nosecondary,
-                  args.expect_cells,
-                  args.execute)
+                  args.nosecondary.lower() == "true",
+                  args.execute.lower() == "true")
 
     @staticmethod
     def parse_args():
@@ -47,36 +47,41 @@ class Count:
         parser.add_argument('--localmem', action="store", default=120)
         parser.add_argument('--fastq_pattern', action="store", default=None)
         parser.add_argument('--nosecondary', action="store", default=True)
-        parser.add_argument('--expect_cells', action="store", default=None)
         parser.add_argument('--execute', action="store", default=True)
 
         return parser.parse_args()
 
     @staticmethod
     def run(libraries_path, feature_reference_path, transcriptome_path, localcores, localmem, fastq_pattern,
-            nosecondary, expect_cells, execute):
+            nosecondary, execute):
 
-        Utils.create_path(Count.OUTPUT_PATH)
-        Utils.create_path(Count.LIBRARIES_PATH)
+        libraries = pd.read_csv(libraries_path)
 
-        libraries = pd.read_table(libraries_path)
         Count.check_libraries(libraries, fastq_pattern)
 
-        libraries = Count.parse_fastqs(libraries, fastq_pattern)
+        libraries = IO.parse_fastqs(libraries, Count.LIBRARY_NAME, Count.FASTQS, fastq_pattern)
+
+        PathManager.create_path(Count.OUTPUT_PATH)
+        PathManager.create_path(Count.LIBRARIES_PATH)
 
         sample_names = set()
+        command_strings = set()
 
-        for index, library in enumerate(Count.split_libraries(libraries)):
-            Count._run(library, feature_reference_path, transcriptome_path, localcores, localmem, nosecondary, expect_cells, execute, index)
+        for library in Count.split_libraries(libraries):
+            command = Count._run(library, feature_reference_path, transcriptome_path, localcores, localmem, nosecondary, execute)
+            command_strings.add(command)
             sample_names.add(library.sample_name.values[0])
 
-        Count.write_sample_names(sample_names)
+        IO.write_sample_names(Count.SAMPLE_NAMES_FILE_PATH, sample_names)
+
+        IO.write_run_script(Count.RUN_SCRIPT_PATH, Count.ARRAY_RUN_SCRIPT_PATH, command_strings, sample_names)
 
     @staticmethod
-    def _run(library: pd.DataFrame, feature_ref_path: str, transcriptome_path, localcores, localmem,
-             nosecondary, expect_cells, execute, index):
+    def _run(library: pd.DataFrame, feature_ref_path: str, transcriptome_path, localcores, localmem, nosecondary, execute):
 
         sample_name = library[Count.SAMPLE_NAME].values[0]
+
+        expect_cells = library[Count.EXPECT_CELLS].values[0] if Count.EXPECT_CELLS in library.columns else None
 
         library_path = Count.LIBRARIES_PATH + sample_name + "_libraries.csv"
 
@@ -107,8 +112,6 @@ class Count:
             p = Popen(cellranger_str, shell=True)
             p.communicate()
 
-        Count.write_run_script(cellranger_str, sample_name)
-
         return cellranger_str
 
     @staticmethod
@@ -133,32 +136,6 @@ class Count:
         if fastq_pattern is None:
             assert Count.FASTQS in libraries.columns, \
                 Count.FASTQS + " column must be present in libraries file if fastq_pattern not specified"
-
-    @staticmethod
-    def parse_fastqs(libraries, fastq_pattern):
-
-        if Count.FASTQS in libraries.columns:
-            warnings.warn("fastq_pattern ignored, fastqs already specified in input libraries file")
-        else:
-            libraries[Count.FASTQS] = [fastq_pattern.replace("<library_name>", x) for x in
-                                       libraries[Count.LIBRARY_NAME].values]
-
-        return libraries
-
-    @staticmethod
-    def write_sample_names(sample_names):
-
-        with open(Count.SAMPLE_NAMES_FILE_PATH, 'w') as filehandle:
-            filehandle.writelines("%s\n" % sample_name for sample_name in sample_names)
-
-    @staticmethod
-    def write_run_script(command_str, sample_name):
-
-        with open(Count.RUN_SCRIPT_PATH, 'a') as run_script:
-            run_script.write(command_str + '\n')
-
-        with open(Count.ARRAY_RUN_SCRIPT_PATH, 'w') as run_script:
-            run_script.write(command_str.replace(sample_name, "${sample_name}") + '\n')
 
 
 if __name__ == "__main__":
