@@ -113,7 +113,6 @@ class Count:
 
         cellranger_str = cellranger_str.format(sample=sample_name,
                                                library_path=os.path.abspath(library_path),
-                                               feature_ref_path=os.path.abspath(feature_ref_path),
                                                transcriptome_path=os.path.abspath(transcriptome_path),
                                                localcores=localcores,
                                                localmem=localmem)
