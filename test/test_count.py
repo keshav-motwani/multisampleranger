@@ -2,7 +2,7 @@ import shutil
 from pathlib import Path
 from unittest import TestCase
 
-from easyranger.count import Count
+from source.count import Count
 
 
 class TestCount(TestCase):

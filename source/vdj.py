@@ -5,8 +5,8 @@ from subprocess import Popen
 
 import pandas as pd
 
-from easyranger.utils.path_manager import PathManager
-from easyranger.utils.io import IO
+from source.utils.path_manager import PathManager
+from source.utils.io import IO
 
 
 class VDJ:
