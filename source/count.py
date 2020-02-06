@@ -48,8 +48,8 @@ class Count:
         parser.add_argument('--transcriptome', action="store")
         parser.add_argument('--localcores', action="store", default=32)
         parser.add_argument('--localmem', action="store", default=120)
-        parser.add_argument('--fastq_pattern', action="store", default=None)
         parser.add_argument('--nosecondary', action="store", default="false")
+        parser.add_argument('--fastq_pattern', action="store", default=None)
         parser.add_argument('--execute', action="store", default="true")
         parser.add_argument('--result_path', action="store", default=".")
 

@@ -4,16 +4,18 @@
 
 `cellranger count` and `vdj` only take a single sample at a time, making it troublesome to run multiple samples through at once. This is especially the case in libraries with feature barcoding, such as those prepared using the CITE-seq assay, as for each sample, one must create a libraries csv for each sample independently, containing the path to fastqs for the gene expression and any other feature barcoding libraries. To get around this limitation, using this wrapper, one can instead create a single libraries file, and specify this. This wrapper will split this by sample name and process them independently.
 
-### Usage
+## Usage
 
-#### `cellranger count`
+### `cellranger count`
 
 ```
 python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
                  [--feature_reference_path FEATURE_REFERENCE_PATH]
                  [--transcriptome TRANSCRIPTOME] [--localcores LOCALCORES]
-                 [--localmem LOCALMEM] [--fastq_pattern FASTQ_PATTERN]
-                 [--nosecondary NOSECONDARY] [--expect_cells EXPECT_CELLS]
+                 [--localmem LOCALMEM] [--nosecondary NOSECONDARY]
+                 [--fastq_pattern FASTQ_PATTERN] [--execute EXECUTE]
+                 [--result_path RESULT_PATH]
+                 
 ```
 
 #### Description of arguments:
@@ -25,16 +27,16 @@ python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
   - `fastqs`: [If `fastq_pattern` not specified]: Path to folder containing fastqs for the library
   - Example contents: 
  
-| sample_name   | library_name  | library_type     |
-|---------------|---------------|------------------|
-| Control1      | Control1_GEX  | Gene Expression  |
-| Diseased1     | Diseased1_GEX | Gene Expression  |
-| Control2      | Control2_GEX  | Gene Expression  |
-| Diseased2     | Diseased2_GEX | Gene Expression  |
-| Control1      | Control1_FB   | Antibody Capture |
-| Diseased1     | Diseased1_FB  | Antibody Capture |
-| Control2      | Control2_FB   | Antibody Capture |
-| Diseased2     | Diseased2_FB  | Antibody Capture |
+| sample_name   | library_name  | library_type     | expected_cell_count |
+|---------------|---------------|------------------|---------------------|
+| Control1      | Control1_GEX  | Gene Expression  | 5000                |
+| Diseased1     | Diseased1_GEX | Gene Expression  | 5000                |
+| Control2      | Control2_GEX  | Gene Expression  | 5000                |
+| Diseased2     | Diseased2_GEX | Gene Expression  | 5000                |
+| Control1      | Control1_FB   | Antibody Capture | 5000                |
+| Diseased1     | Diseased1_FB  | Antibody Capture | 5000                |
+| Control2      | Control2_FB   | Antibody Capture | 5000                |
+| Diseased2     | Diseased2_FB  | Antibody Capture | 5000                |
 
 
 * `feature_reference_path`: Path to feature reference information in same format as `cellranger count --feature-ref` argument.
@@ -47,7 +49,11 @@ python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
 | CD15    | TCACCAGTACCTAGT | CD15    | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
 | CD127   | GTGTGTTGTCCTATG | CD127   | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
 
-* `transcriptome`, `localcores`, `localmem`, `expect_cells`: Same as respective arguments to `cellranger count`.
+* `transcriptome`, `localcores`, `localmem`, `nosecondary`: Same as respective arguments to `cellranger count`.
 
 * `fastq_pattern`: A string containing the path to fastqs, but instead of including each `library_name`, the string contains `<library_name>` which will be replaced with the sample name as specified in the `libraries_path` file.
   - Example: `/home/PREFIX/<library_name>/SUFFIX`
+
+* `execute`: whether cellranger commands should actually be executed, or if only the input and commands should be prepared (see more below in the section on array jobs)
+
+* `result_path`: path where `cellranger count` output should be  stored.
