@@ -29,14 +29,14 @@ python3 source/count.py [-h] [--libraries_path LIBRARIES_PATH]
  
 | sample_name   | library_name  | library_type     | expected_cell_count |
 |---------------|---------------|------------------|---------------------|
-| Control1      | Control1_GEX  | Gene Expression  | 5000                |
-| Diseased1     | Diseased1_GEX | Gene Expression  | 5000                |
-| Control2      | Control2_GEX  | Gene Expression  | 5000                |
-| Diseased2     | Diseased2_GEX | Gene Expression  | 5000                |
-| Control1      | Control1_FB   | Antibody Capture | 5000                |
-| Diseased1     | Diseased1_FB  | Antibody Capture | 5000                |
-| Control2      | Control2_FB   | Antibody Capture | 5000                |
-| Diseased2     | Diseased2_FB  | Antibody Capture | 5000                |
+| Control1      | Control1_GEX  |
+| Diseased1     | Diseased1_GEX |
+| Control2      | Control2_GEX  |
+| Diseased2     | Diseased2_GEX |
+| Control1      | Control1_FB   |
+| Diseased1     | Diseased1_FB  |
+| Control2      | Control2_FB   |
+| Diseased2     | Diseased2_FB  |
 
 
 * `feature_reference_path`: Path to feature reference information in same format as `cellranger count --feature-ref` argument.
@@ -44,10 +44,10 @@ python3 source/count.py [-h] [--libraries_path LIBRARIES_PATH]
   
 | id      | sequence        | name    | read | pattern          | feature_type     | 
 |---------|-----------------|---------|------|------------------|------------------| 
-| HLA-DRA | AATAGCGAGCAAGTA | HLA-DRA | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
-| CD3     | CTCATTGTAACTCCT | CD3     | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
-| CD15    | TCACCAGTACCTAGT | CD15    | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
-| CD127   | GTGTGTTGTCCTATG | CD127   | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
+| HLA-DRA | AATAGCGAGCAAGTA | HLA-DRA | R2   | 5PNNNNNNNNNN(BC) | 
+| CD3     | CTCATTGTAACTCCT | CD3     | R2   | 5PNNNNNNNNNN(BC) | 
+| CD15    | TCACCAGTACCTAGT | CD15    | R2   | 5PNNNNNNNNNN(BC) | 
+| CD127   | GTGTGTTGTCCTATG | CD127   | R2   | 5PNNNNNNNNNN(BC) | 
 
 * `transcriptome`, `localcores`, `localmem`, `nosecondary`: Same as respective arguments to `cellranger count`.
 
@@ -66,6 +66,53 @@ A folder named `easyranger_count` is created in the `result_path`, containing th
 * `run_script.bash`: script containing all of the `cellranger` commands
 * `array_run_script.bash`: script containing the command used in creating a SLURM array job
 * `sample_names.txt`: text file containing the unique `sample_name`, also used in creating a SLURM array job
+
+
+### `vdj`
+
+```
+python3 source/vdj.py [-h] [--libraries_path LIBRARIES_PATH]
+                      [--reference REFERENCE] [--localcores LOCALCORES]
+                      [--localmem LOCALMEM] [--fastq_pattern FASTQ_PATTERN] 
+                      [--execute EXECUTE] [--result_path RESULT_PATH]
+```
+
+#### Arguments:
+
+* `libraries_path`: Path to libraries file with the following columns:
+  - `sample_name`: Column indicating the biological sample from which the library originated.
+  - `library_name`: Column indicating the name of library, multiple libraries per `sample_name` are common for CITE-seq - one for gene expression, one for feature barcodes
+  - `fastqs`: [If `fastq_pattern` not specified]: Path to folder containing fastqs for the library
+  - Example contents: 
+ 
+| sample_name   | library_name  |
+|---------------|---------------|
+| Control1      | Control1_GEX  |
+| Diseased1     | Diseased1_GEX |
+| Control2      | Control2_GEX  |
+| Diseased2     | Diseased2_GEX |
+| Control1      | Control1_FB   |
+| Diseased1     | Diseased1_FB  |
+| Control2      | Control2_FB   |
+| Diseased2     | Diseased2_FB  |
+
+* `reference`, `localcores`, `localmem`: Same as respective arguments to `cellranger vdj`.
+
+* `fastq_pattern`: A string containing the path to fastqs, but instead of including each `library_name`, the string contains `<library_name>` which will be replaced with the sample name as specified in the `libraries_path` file.
+  - Example: `/home/PREFIX/<library_name>/SUFFIX`
+
+* `execute`: whether cellranger commands should actually be executed, or if only the input and commands should be prepared (see more below in the section on array jobs)
+
+* `result_path`: path where `cellranger vdj` output should be  stored.
+
+#### Output:
+
+A folder named `easyranger_vdj` is created in the `result_path`, containing the following:
+
+* `run_script.bash`: script containing all of the `cellranger` commands
+* `array_run_script.bash`: script containing the command used in creating a SLURM array job
+* `sample_names.txt`: text file containing the unique `sample_name`, also used in creating a SLURM array job
+
 
 ### Using SLURM Job Arrays
 
