@@ -113,10 +113,10 @@ class VDJ:
     def check_libraries(libraries, fastq_pattern):
 
         assert VDJ.SAMPLE_NAME in libraries.columns, \
-            VDJ.SAMPLE_NAME + " column must be present in libraries file"
+            VDJ.SAMPLE_NAME + " column must be present in libraries file, current columns are: " + "|".join(libraries.columns)
 
         assert VDJ.LIBRARY_NAME in libraries.columns, \
-            VDJ.LIBRARY_NAME + " column must be present in libraries file"
+            VDJ.LIBRARY_NAME + " column must be present in libraries file, current columns are: " + "|".join(libraries.columns)
 
         if fastq_pattern is None:
             assert VDJ.FASTQS in libraries.columns, \

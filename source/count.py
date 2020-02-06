@@ -136,13 +136,13 @@ class Count:
     def check_libraries(libraries, fastq_pattern):
 
         assert Count.SAMPLE_NAME in libraries.columns, \
-            Count.SAMPLE_NAME + " column must be present in libraries file"
+            Count.SAMPLE_NAME + " column must be present in libraries file, current columns are: " + "|".join(libraries.columns)
 
         assert Count.LIBRARY_NAME in libraries.columns, \
-            Count.LIBRARY_NAME + " column must be present in libraries file"
+            Count.LIBRARY_NAME + " column must be present in libraries file, current columns are: " + "|".join(libraries.columns)
 
         assert Count.LIBRARY_TYPE in libraries.columns, \
-            Count.LIBRARY_TYPE + " column must be present in libraries file"
+            Count.LIBRARY_TYPE + " column must be present in libraries file, current columns are: " + "|".join(libraries.columns)
 
         if fastq_pattern is None:
             assert Count.FASTQS in libraries.columns, \
