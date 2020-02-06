@@ -15,7 +15,6 @@ python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
                  [--localmem LOCALMEM] [--nosecondary NOSECONDARY]
                  [--fastq_pattern FASTQ_PATTERN] [--execute EXECUTE]
                  [--result_path RESULT_PATH]
-                 
 ```
 
 #### Description of arguments:
@@ -24,6 +23,7 @@ python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
   - `sample_name`: Column indicating the biological sample from which the library originated.
   - `library_name`: Column indicating the name of library, multiple libraries per `sample_name` are common for CITE-seq - one for gene expression, one for feature barcodes
   - `library_type`: Can be `Gene Expression`, `Antibody Capture`, `CRISPR`, or `Custom`
+  - `expected_cell_count`: Number of cells expected from each sample (should be consistent for each sample_name across libraries, if column not included, defaults to `cellranger`'s default)
   - `fastqs`: [If `fastq_pattern` not specified]: Path to folder containing fastqs for the library
   - Example contents: 
  
