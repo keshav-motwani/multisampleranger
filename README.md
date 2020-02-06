@@ -87,14 +87,11 @@ python3 source/vdj.py [-h] [--libraries_path LIBRARIES_PATH]
  
 | sample_name   | library_name  |
 |---------------|---------------|
-| Control1      | Control1_GEX  |
-| Diseased1     | Diseased1_GEX |
-| Control2      | Control2_GEX  |
-| Diseased2     | Diseased2_GEX |
-| Control1      | Control1_FB   |
-| Diseased1     | Diseased1_FB  |
-| Control2      | Control2_FB   |
-| Diseased2     | Diseased2_FB  |
+| Control1      | Control1_VDJ  |
+| Diseased1     | Diseased1_VDJ |
+| Control2      | Control2_VDJ  |
+| Diseased2     | Diseased2_VDJ |
+
 
 * `reference`, `localcores`, `localmem`: Same as respective arguments to `cellranger vdj`.
 
