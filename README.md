@@ -29,14 +29,14 @@ python3 source/count.py [-h] [--libraries_path LIBRARIES_PATH]
  
 | sample_name   | library_name  | library_type     | expected_cell_count |
 |---------------|---------------|------------------|---------------------|
-| Control1      | Control1_GEX  |
-| Diseased1     | Diseased1_GEX |
-| Control2      | Control2_GEX  |
-| Diseased2     | Diseased2_GEX |
-| Control1      | Control1_FB   |
-| Diseased1     | Diseased1_FB  |
-| Control2      | Control2_FB   |
-| Diseased2     | Diseased2_FB  |
+| Control1      | Control1_GEX  | Gene Expression  | 5000                |
+| Diseased1     | Diseased1_GEX | Gene Expression  | 5000                |
+| Control2      | Control2_GEX  | Gene Expression  | 5000                |
+| Diseased2     | Diseased2_GEX | Gene Expression  | 5000                |
+| Control1      | Control1_FB   | Antibody Capture | 5000                |
+| Diseased1     | Diseased1_FB  | Antibody Capture | 5000                |
+| Control2      | Control2_FB   | Antibody Capture | 5000                |
+| Diseased2     | Diseased2_FB  | Antibody Capture | 5000                |
 
 
 * `feature_reference_path`: Path to feature reference information in same format as `cellranger count --feature-ref` argument.
@@ -44,10 +44,10 @@ python3 source/count.py [-h] [--libraries_path LIBRARIES_PATH]
   
 | id      | sequence        | name    | read | pattern          | feature_type     | 
 |---------|-----------------|---------|------|------------------|------------------| 
-| HLA-DRA | AATAGCGAGCAAGTA | HLA-DRA | R2   | 5PNNNNNNNNNN(BC) | 
-| CD3     | CTCATTGTAACTCCT | CD3     | R2   | 5PNNNNNNNNNN(BC) | 
-| CD15    | TCACCAGTACCTAGT | CD15    | R2   | 5PNNNNNNNNNN(BC) | 
-| CD127   | GTGTGTTGTCCTATG | CD127   | R2   | 5PNNNNNNNNNN(BC) | 
+| HLA-DRA | AATAGCGAGCAAGTA | HLA-DRA | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
+| CD3     | CTCATTGTAACTCCT | CD3     | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
+| CD15    | TCACCAGTACCTAGT | CD15    | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
+| CD127   | GTGTGTTGTCCTATG | CD127   | R2   | 5PNNNNNNNNNN(BC) | Antibody Capture | 
 
 * `transcriptome`, `localcores`, `localmem`, `nosecondary`: Same as respective arguments to `cellranger count`.
 
