@@ -49,8 +49,8 @@ class Count:
         parser.add_argument('--localcores', action="store", default=32)
         parser.add_argument('--localmem', action="store", default=120)
         parser.add_argument('--fastq_pattern', action="store", default=None)
-        parser.add_argument('--nosecondary', action="store", default=True)
-        parser.add_argument('--execute', action="store", default=True)
+        parser.add_argument('--nosecondary', action="store", default="false")
+        parser.add_argument('--execute', action="store", default="true")
         parser.add_argument('--result_path', action="store", default=".")
 
         return parser.parse_args()
@@ -59,7 +59,7 @@ class Count:
     def run(libraries_path, feature_reference_path, transcriptome_path, localcores, localmem, fastq_pattern,
             nosecondary, execute, result_path):
 
-        libraries = pd.read_csv(libraries_path)
+        libraries = pd.read_table(libraries_path, sep=None)
 
         Count.check_libraries(libraries, fastq_pattern)
 
