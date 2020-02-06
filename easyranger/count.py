@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os
 import sys; sys.path.extend([os.path.abspath(__file__ + "/../../")])
 import argparse
