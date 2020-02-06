@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import sys; sys.path.extend([os.path.abspath(__file__ + "/../../")])
 import argparse
@@ -5,8 +7,8 @@ from subprocess import Popen
 
 import pandas as pd
 
-from source.utils.path_manager import PathManager
-from source.utils.io import IO
+from easyranger.utils.path_manager import PathManager
+from easyranger.utils.io import IO
 
 
 class VDJ:

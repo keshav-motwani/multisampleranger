@@ -6,10 +6,10 @@
 
 ## Usage
 
-### `cellranger count`
+### `count`
 
 ```
-python3 count.py [-h] [--libraries_path LIBRARIES_PATH]
+easyranger/count [-h] [--libraries_path LIBRARIES_PATH]
                  [--feature_reference_path FEATURE_REFERENCE_PATH]
                  [--transcriptome TRANSCRIPTOME] [--localcores LOCALCORES]
                  [--localmem LOCALMEM] [--nosecondary NOSECONDARY]

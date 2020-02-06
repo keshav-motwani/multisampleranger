@@ -2,7 +2,7 @@ import shutil
 from pathlib import Path
 from unittest import TestCase
 
-from source.vdj import VDJ
+from easyranger.vdj import VDJ
 
 
 class TestVDJ(TestCase):
