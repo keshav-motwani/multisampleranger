@@ -6,7 +6,7 @@
 
 ## Usage
 
-### `cellranger count`
+### `count`
 
 ```
 python3 source/count.py [-h] [--libraries_path LIBRARIES_PATH]
