@@ -51,7 +51,7 @@ class VDJ:
     @staticmethod
     def run(libraries_path, reference_path, localcores, localmem, fastq_pattern, execute, result_path):
 
-        libraries = pd.read_table(libraries_path, sep=None, engine="python")
+        libraries = pd.read_table(libraries_path, sep=None, engine="python", encoding='utf-8-sig')
 
         VDJ.check_libraries(libraries, fastq_pattern)
 

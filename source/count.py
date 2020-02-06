@@ -59,7 +59,7 @@ class Count:
     def run(libraries_path, feature_reference_path, transcriptome_path, localcores, localmem, fastq_pattern,
             nosecondary, execute, result_path):
 
-        libraries = pd.read_table(libraries_path, sep=None, engine="python")
+        libraries = pd.read_table(libraries_path, sep=None, engine="python", encoding='utf-8-sig')
 
         Count.check_libraries(libraries, fastq_pattern)
 
