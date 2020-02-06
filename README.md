@@ -6,15 +6,15 @@
 
 ## Usage
 
-### `count`
+### `cellranger count`
 
 ```
-easyranger/count [-h] [--libraries_path LIBRARIES_PATH]
-                 [--feature_reference_path FEATURE_REFERENCE_PATH]
-                 [--transcriptome TRANSCRIPTOME] [--localcores LOCALCORES]
-                 [--localmem LOCALMEM] [--nosecondary NOSECONDARY]
-                 [--fastq_pattern FASTQ_PATTERN] [--execute EXECUTE]
-                 [--result_path RESULT_PATH]
+python3 source/count.py [-h] [--libraries_path LIBRARIES_PATH]
+                        [--feature_reference_path FEATURE_REFERENCE_PATH]
+                        [--transcriptome TRANSCRIPTOME] [--localcores LOCALCORES]
+                        [--localmem LOCALMEM] [--nosecondary NOSECONDARY]
+                        [--fastq_pattern FASTQ_PATTERN] [--execute EXECUTE]
+                        [--result_path RESULT_PATH]
 ```
 
 #### Description of arguments:
