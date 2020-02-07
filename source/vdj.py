@@ -59,13 +59,13 @@ class VDJ:
 
         PathManager.create_path(result_path + "/" + VDJ.OUTPUT_PATH)
 
-        sample_names = set()
-        command_strings = set()
+        sample_names = list()
+        command_strings = list()
 
         for library in VDJ.split_libraries(libraries):
             command = VDJ._run(library, reference_path, localcores, localmem, execute, result_path)
-            command_strings.add(command)
-            sample_names.add(library.sample_name.values[0])
+            command_strings.append(command)
+            sample_names.append(library.sample_name.values[0])
 
         IO.write_sample_names(result_path + "/" + VDJ.SAMPLE_NAMES_FILE_PATH,
                               sample_names)

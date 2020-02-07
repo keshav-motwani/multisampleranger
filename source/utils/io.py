@@ -12,9 +12,6 @@ class IO:
     @staticmethod
     def write_run_script(run_script_path, array_run_script_path, command_strings, sample_names):
 
-        command_strings = sorted(command_strings)
-        sample_names = sorted(sample_names)
-
         with open(run_script_path, 'w') as run_script:
             run_script.writelines([command + "\n" for command in command_strings])
 
