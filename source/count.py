@@ -20,8 +20,6 @@ class Count:
     OUTPUT_PATH = "easyranger_count/"
     LIBRARIES_PATH = OUTPUT_PATH + "libraries/"
     RUN_SCRIPT_PATH = OUTPUT_PATH + "run_script.bash"
-    ARRAY_RUN_SCRIPT_PATH = OUTPUT_PATH + "array_run_script.bash"
-    SAMPLE_NAMES_FILE_PATH = OUTPUT_PATH + "sample_names.txt"
 
     @staticmethod
     def main():
@@ -68,21 +66,14 @@ class Count:
         PathManager.create_path(result_path + "/" + Count.OUTPUT_PATH)
         PathManager.create_path(result_path + "/" + Count.LIBRARIES_PATH)
 
-        sample_names = list()
         command_strings = list()
 
         for library in Count.split_libraries(libraries):
             command = Count._run(library, feature_reference_path, transcriptome_path, localcores, localmem, nosecondary, execute, result_path)
             command_strings.append(command)
-            sample_names.append(library.sample_name.values[0])
-
-        IO.write_sample_names(result_path + "/" + Count.SAMPLE_NAMES_FILE_PATH,
-                              sample_names)
 
         IO.write_run_script(result_path + "/" + Count.RUN_SCRIPT_PATH,
-                            result_path + "/" + Count.ARRAY_RUN_SCRIPT_PATH,
-                            command_strings,
-                            sample_names)
+                            command_strings)
 
     @staticmethod
     def _run(library: pd.DataFrame, feature_ref_path: str, transcriptome_path, localcores, localmem, nosecondary, execute, result_path):

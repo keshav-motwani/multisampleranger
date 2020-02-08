@@ -64,8 +64,6 @@ A folder named `easyranger_count` is created in the `result_path`, containing th
 
 * `libraries`: a folder containing the files for the `libraries` input to `cellranger`, one for each unique `sample_name` in the `libraries_path` file
 * `run_script.bash`: script containing all of the `cellranger` commands
-* `array_run_script.bash`: script containing the command used in creating a SLURM array job
-* `sample_names.txt`: text file containing the unique `sample_name`, also used in creating a SLURM array job
 
 
 ### `vdj`
@@ -107,8 +105,6 @@ python3 source/vdj.py [-h] [--libraries_path LIBRARIES_PATH]
 A folder named `easyranger_vdj` is created in the `result_path`, containing the following:
 
 * `run_script.bash`: script containing all of the `cellranger` commands
-* `array_run_script.bash`: script containing the command used in creating a SLURM array job
-* `sample_names.txt`: text file containing the unique `sample_name`, also used in creating a SLURM array job
 
 
 ### Using SLURM Job Arrays
@@ -119,35 +115,15 @@ First, the `easyranger` wrapper needs to be run, with argument `--execute False`
 
 We assume that this has been run, and once this is run, the following SLURM script can be run. The `#SBATCH` options depend on your use-case, but ensure that the `--array` command is `1-[n_samples]`. 
 
-This must be run from either within the `result_path`, or `cd` to the `result_path`, or adjust the file paths in the script.
-
 ```
 #!/bin/bash
-#SBATCH --job-name=XXX
-#SBATCH --time=XXX
-#SBATCH --mail-user=XXX
-#SBATCH --mail-type=ALL
-#SBATCH --ntasks=XXX
-#SBATCH --cpus-per-task=XXX
-#SBATCH --mem=XXX
-#SBATCH --qos=XXX
-#SBATCH --array=1-39
-#SBATCH --output=XXX.log
+#SBATCH XXX
 
 ml cellranger/3.1.0
 
-# set working directory to result_path
-cd out/count
+IFS=$'\n' read -d '' -r -a commands < easyranger_count/run_script.bash
 
-# read in sample names as array, so that it can be indexed
-IFS=$'\n' read -d '' -r -a sample_names < easyranger_count/sample_names.txt
-
-# export sample_name so it can be used by array_run_script
-export sample_name=${sample_names[$SLURM_ARRAY_TASK_ID]}
-
-# run cellranger command using output from easyranger
-chmod u+x easyranger_count/array_run_script.bash
-./easyranger_count/array_run_script.bash
+eval ${commands[$SLURM_ARRAY_TASK_ID]}
 ```
 
-While this example was for the `count` wrapper, this also applies to the `vdj` wrapper. Simply replace instances of `easyranger_count` with `easyranger_vdj`.
+While this example was for the `count` wrapper, this also applies to the `vdj` wrapper. Simply replace `easyranger_count` with `easyranger_vdj`.
