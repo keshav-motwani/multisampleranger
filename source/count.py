@@ -93,7 +93,7 @@ class Count:
 
         library_path = result_path + "/" + Count.LIBRARIES_PATH + sample_name + "_libraries.csv"
 
-        library = library.assign(sample=library.library_name)
+        library = library.assign(sample=[val.rsplit("/")[-1] for val in library.library_name])
         library[["fastqs", "sample", "library_type"]].to_csv(library_path, index=False)
 
         cellranger_str = "cellranger count --id={sample}" + \
