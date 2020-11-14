@@ -1,5 +1,7 @@
 import warnings
 
+from source.utils.path_manager import PathManager
+
 
 class IO:
 
@@ -18,4 +20,6 @@ class IO:
             libraries[fastq_column] = [fastq_pattern.replace("<library_name>", x) for x in
                                        libraries[library_column].values]
 
-        return libraries
+        size = [PathManager.get_size(file) > 1 for file in libraries[fastq_column]]
+
+        return libraries[size]

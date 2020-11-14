@@ -139,6 +139,5 @@ class Count:
             assert Count.FASTQS in libraries.columns, \
                 Count.FASTQS + " column must be present in libraries file if fastq_pattern not specified"
 
-
 if __name__ == "__main__":
     Count.main()
