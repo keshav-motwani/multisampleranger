@@ -30,12 +30,12 @@ python3 source/count.py [-h] [--libraries_path LIBRARIES_PATH]
 | sample_name   | library_name  | library_type     | expected_cell_count |
 |---------------|---------------|------------------|---------------------|
 | Control1      | Control1_GEX  | Gene Expression  | 5000                |
-| Diseased1     | Diseased1_GEX | Gene Expression  | 5000                |
-| Control2      | Control2_GEX  | Gene Expression  | 5000                |
-| Diseased2     | Diseased2_GEX | Gene Expression  | 5000                |
 | Control1      | Control1_FB   | Antibody Capture | 5000                |
+| Diseased1     | Diseased1_GEX | Gene Expression  | 5000                |
 | Diseased1     | Diseased1_FB  | Antibody Capture | 5000                |
+| Control2      | Control2_GEX  | Gene Expression  | 5000                |
 | Control2      | Control2_FB   | Antibody Capture | 5000                |
+| Diseased2     | Diseased2_GEX | Gene Expression  | 5000                |
 | Diseased2     | Diseased2_FB  | Antibody Capture | 5000                |
 
 
