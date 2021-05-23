@@ -1,4 +1,4 @@
-# easyranger
+# multisampleranger
 
 ### Wrapper around cellranger count and vdj to run multiple samples at once.
 
